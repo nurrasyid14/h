@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # *Smart System Workshop: Classical ML for Sentiment Analysis**
 3rd Smt Text Mining Recap
 ===
@@ -89,3 +90,10 @@ project/
 
 ---
 ## **References**
+=======
+# IndoToxic 2024
+
+Project structure for preprocessing, modeling, evaluation, and dashboard development.
+
+Run preprocessing from `prepro.ipynb`, then use the generated files under `data/processed/`.
+>>>>>>> master

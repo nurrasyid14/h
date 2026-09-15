@@ -1,0 +1,52 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Environment and local configuration
+.env
+.env.*
+!.env.example
+
+# Generated datasets
+/data/interim/*.csv
+/data/processed/*.csv
+/data/raw/*.jsonl
+!/data/raw/.gitkeep
+
+# Trained models
+/models/*.joblib
+/models/*.pkl
+/models/*.pickle
+
+# Generated reports and figures
+/reports/figures/*.png
+/reports/figures/*.jpg
+/reports/figures/*.jpeg
+/reports/figures/*.svg
+
+# Test and tool caches
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# IDE and OS files
+.vscode/*
+!.vscode/settings.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
