@@ -1,46 +1,44 @@
 # IndoToxic 2024
 
-Indonesian toxicity analysis project. This repository currently contains a raw annotated dataset, a preprocessing notebook and intermediate CSV outputs, three Random Forest classifier wrappers, and a dashboard scaffold.
+Indonesian toxicity analysis using annotated comments, text preprocessing, a multi-head Random Forest model, an SVM toxicity classifier, and transparent lexicon/pattern signals.
 
-## Roadmap Status
+## Project Status
 
-Marks describe the state of the artifacts in this repository, not just whether a filename exists.
+Statuses describe current artifacts and remaining work.
 
-| # | Stage | Status | Evidence and remaining work |
-| --- | --- | --- | --- |
-| 0 | EDA 1 | ⚠️ Partial / blocked | `notebooks/01_EDA.ipynb` is empty. `notebooks/data_understanding.ipynb` contains exploratory checks for schema, duplicates, toxicity, topics, category counts, and null values, but it reads `data/raw/indotoxic2024_annotated_data-3.jsonl`; that file is absent. The available raw dataset is CSV. |
-| 1 | Prep 1 | ⚠️ Draft implemented | `notebooks/02_preprocessing.ipynb` contains spam/empty-text removal, duplicate and label-conflict handling, emoji extraction, text cleaning, slang normalization, topic-list preparation, and optional stopword removal, stemming, and topic encoding. Its saved execution state is unexecuted. A processed CSV exists, but the notebook saves `df` rather than `df_processed`, so the exported file does not contain `text_processed`. |
-| 2 | EDA 2 | ⬜ Not started | No post-preprocessing EDA notebook or report is present. |
-| 3 | Feature Engineerings | ⚠️ Partial | Preprocessing code creates `emoji`, `text_clean`, and `topic_list`; it defines stopword/stemming and multi-label encoding helpers. The final processed features are not persisted in the current processed CSV, and there is no separate feature-engineering module/pipeline. |
-| 4 | Trimodel (classif/rf files) + orchestration | ⚠️ Partial | `src/classif/sentiment_rf.py`, `mood_rf.py`, and `subtopic_rf.py` provide classifier wrappers. `src/trimodel_rf.py` and `src/train.py` are stubs, and `models/` contains no trained model artifacts. |
-| 5 | Toxicity classif and meters | ⬜ Not started | `src/classif/toxicity_meter.py` is empty. No toxicity classifier or toxicity-meter implementation/model is present. Toxicity labels are present in the raw and interim data. |
-| 6 | Filtering | ⚠️ Partial | Prep removes spam, blank text, duplicate text, and conflicting toxicity labels. A separate downstream filtering/refinement stage is not implemented. |
-| 7 | Dashboard building | ⚠️ Scaffold | Four dashboard templates are present, but `dashboard/app.py`, `routes.py`, and the inference/chart services contain only module docstrings; the dashboard is not wired to trained models. |
-
-## Notebooks
-
-| Notebook | Current contents | State / issue |
+| Stage | Status | Current state and remaining work |
 | --- | --- | --- |
-| `notebooks/01_EDA.ipynb` | No cells | Empty. |
-| `notebooks/data_understanding.ipynb` | Raw-data loading and exploratory checks | Expects a missing JSONL input; use or generate the available raw CSV instead. |
-| `notebooks/02_preprocessing.ipynb` | Cleaning and preprocessing workflow | Cells are not marked as executed. The output cell writes `df` with the default CSV index, rather than writing `df_processed` with `index=False`. |
-| `notebooks/03_Modeling.ipynb` | No cells | Empty. |
-| `notebooks/04_Evaluation.ipynb` | No cells | Empty. |
+| EDA 1 | Partial / blocked | `notebooks/01_EDA.ipynb` is empty. `notebooks/data_understanding.ipynb` expects a JSONL file that is absent; the available raw source is CSV. |
+| Preprocessing | **Complete; revision needed** | `notebooks/02_preprocessing.ipynb` and `data/processed/data_cleaned_before_encode.csv` exist. Revisit the export/feature decisions and verify the final saved columns and row counts before treating this as a stable training input. |
+| EDA 2 | Not started | No completed post-preprocessing EDA report is present. |
+| Feature engineering | Partial | The modeling notebook currently fits TF-IDF on its training partition. A reusable, persisted preprocessing/feature pipeline still needs refinement. |
+| Modeling | **Complete; needs some refinements** | `notebooks/03_Modeling.ipynb` contains a duplicate-grouped split, TriModel Random Forest heads, and a final `ToxicOrNot` calibrated LinearSVC. Out-of-fold TriModel proto-class columns and exact-match rule features feed the final toxicity model. The notebook's saved execution state is unexecuted, so rerun it to refresh metrics and artifacts. Mood and sentiment remain toxicity-derived proxies. |
+| Toxicity decision | Implemented; refine policy | The final SVM consumes text, TriModel proto-classes, and rule hit/count features; its calibrated predicted-class confidence is evaluated with held-out Brier score. Lexicon disagreement remains a review signal, not an automatic override. |
+| Gambling-ad detection | Heuristic implemented | X-tag search is optional and requires authorized API access. The keyword-plus-number detector flags candidates, not confirmed ads. `data/togelnumbers.json` records source metadata, but has no verified number meanings yet. |
+| Dashboarding | **Null** | Templates exist, but dashboard app/routes/services are placeholders and are not connected to trained models. |
 
-## Data Inventory
+## Current Flow
 
-| Folder / file | Current contents | Observed size |
-| --- | --- | --- |
-| `data/raw/indotoxic2024_annotated_data-3.csv` | Annotated source CSV; 17 columns | 43,692 rows; about 20.3 MB |
-| `data/interim/label_conflict.csv` | Rows associated with conflicting toxicity labels; same 17-column schema | 8,955 rows; about 5.8 MB |
-| `data/processed/data_cleaned_before_encode.csv` | Cleaned text and topic-list fields are present; no encoded topic columns or `text_processed` | 23,009 rows; about 16.9 MB; includes an unnamed index column |
+The flowchart source is [charts/chart30092026.mermaid.js](charts/chart30092026.mermaid.js).
 
-These are the only data files currently present under `data/`. The counts above are a snapshot of the checked-in workspace; rerunning preprocessing may change them. The `label_conflict.csv` row count is a row count, not necessarily a count of unique conflicting texts.
+The processed comments feed the notebook's duplicate-safe train/test split. The TriModel generates mood/sentiment proxy labels and subtopics; out-of-fold proto-class columns are appended with lexicon hit/count features. A calibrated LinearSVC then predicts the annotated toxicity target and confidence. Conflicting rule signals are surfaced for review. Optional X posts can also be scanned for gambling-promotion patterns. Dashboarding remains unimplemented.
 
-## Current Next Steps
+## Data Snapshot
 
-1. Point the EDA notebook at the existing raw CSV and complete `01_EDA.ipynb`.
-2. Rerun preprocessing, save the intended final dataframe (`df_processed`) without its index, and verify the resulting columns and row counts.
-3. Add EDA 2 and persist/validate the feature-engineering output before training.
-4. Implement and test trimodel orchestration, then toxicity classification/meters and downstream filtering.
-5. Connect dashboard routes and services to saved models and verify the end-to-end workflow.
+| File | Contents |
+| --- | --- |
+| `data/raw/indotoxic2024_annotated_data-3.csv` | Annotated source dataset. |
+| `data/interim/label_conflict.csv` | Rows collected for label-conflict review. |
+| `data/processed/data_cleaned_before_encode.csv` | Current cleaned modeling input with text and topic-list fields. |
+| `data/umpatan.json` | Indonesian/regional expressions used for exact-match review signals. Entries may be contextual and are not automatic SVM overrides. |
+| `data/togelnumbers.json` | Source registry for possible number-meaning references; meanings are currently empty/unverified. |
+
+`models/` currently contains the mood, sentiment, subtopic, and TriModel artifacts. It does not yet contain the new `toxic_or_not` artifact; rerun the modeling notebook to create it.
+
+## Next Work
+
+1. Revise preprocessing output and verify the persisted schema.
+2. Run `notebooks/03_Modeling.ipynb` top to bottom and review per-class toxicity metrics and rule disagreements.
+3. Complete EDA 1/2 and the dedicated evaluation workflow.
+4. Review lexicon context/provenance and add number meanings only from authorized, verified sources.
+5. Implement dashboard routes, inference, and charts; then verify the end-to-end workflow.
