@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "entry_format": {
+    "number": "2–3 digit string",
+    "meaning": "short paraphrase from an authorized source",
+    "meaning_status": ["unambiguous", "contextual", "unknown"],
+    "review_status": ["pending", "verified"],
+    "source_ids": ["source id"]
+  },
+  "sources": [
+    {
+      "id": "scribd_250469525",
+      "title": "Buku Mimpi dan Angka Togel 2D",
+      "url": "https://www.scribd.com/doc/250469525/togel",
+      "rights_status": "unverified",
+      "ingestion_status": "not_ingested"
+    },
+    {
+      "id": "scribd_438487558",
+      "title": "Tafsir Mimpi Angka Togel 2D",
+      "url": "https://www.scribd.com/document/438487558/91929324-Buku-Tafsir-Mimpi-Angka-Togel-2d",
+      "rights_status": "unverified",
+      "ingestion_status": "not_ingested"
+    }
+  ],
+  "entries": []
+}
