@@ -11,3 +11,5 @@ scipy
 seaborn
 tqdm
 wordcloud
+openpyxl
+streamlit
