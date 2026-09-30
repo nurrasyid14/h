@@ -13,3 +13,5 @@ tqdm
 wordcloud
 openpyxl
 streamlit
+plotly
+graphviz

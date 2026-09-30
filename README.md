@@ -15,13 +15,26 @@ Statuses describe current artifacts and remaining work.
 | Modeling | **Complete; needs some refinements** | `notebooks/03_Modeling.ipynb` contains a duplicate-grouped split, TriModel Random Forest heads, and a final `ToxicOrNot` calibrated LinearSVC. Out-of-fold TriModel proto-class columns and exact-match rule features feed the final toxicity model. The notebook's saved execution state is unexecuted, so rerun it to refresh metrics and artifacts. Mood and sentiment remain toxicity-derived proxies. |
 | Toxicity decision | Implemented; refine policy | The final SVM consumes text, TriModel proto-classes, and rule hit/count features; its calibrated predicted-class confidence is evaluated with held-out Brier score. Lexicon disagreement remains a review signal, not an automatic override. |
 | Gambling-ad detection | Heuristic implemented | X-tag search is optional and requires authorized API access. The keyword-plus-number detector flags candidates, not confirmed ads. `data/togelnumbers.json` records source metadata, but has no verified number meanings yet. |
-| Dashboarding | **Null** | Templates exist, but dashboard app/routes/services are placeholders and are not connected to trained models. |
+| Dashboarding | **Complete** | Streamlit multi-page dashboard implemented (`dashboard/app.py`) with live AI inference, EDA, batch CSV moderation, model diagnostics, and regional lexicon audit. |
 
 ## Current Flow
 
 The flowchart source is [charts/chart30092026.mermaid.js](charts/chart30092026.mermaid.js).
 
-The processed comments feed the notebook's duplicate-safe train/test split. The TriModel generates mood/sentiment proxy labels and subtopics; out-of-fold proto-class columns are appended with lexicon hit/count features. A calibrated LinearSVC then predicts the annotated toxicity target and confidence. Conflicting rule signals are surfaced for review. Optional X posts can also be scanned for gambling-promotion patterns. Dashboarding remains unimplemented.
+The processed comments feed the notebook's duplicate-safe train/test split. The TriModel generates mood/sentiment proxy labels and subtopics; out-of-fold proto-class columns are appended with lexicon hit/count features. A calibrated LinearSVC then predicts the annotated toxicity target and confidence. Conflicting rule signals are surfaced for review. Optional X posts can also be scanned for gambling-promotion patterns. The interactive Streamlit dashboard connects directly to these trained models and data.
+
+## Running the Dashboard
+
+To launch the interactive Streamlit dashboard:
+
+```bash
+cd h
+streamlit run dashboard/app.py
+```
+or from the project root:
+```bash
+streamlit run app.py
+```
 
 ## Data Snapshot
 
@@ -33,12 +46,11 @@ The processed comments feed the notebook's duplicate-safe train/test split. The 
 | `data/umpatan.json` | Indonesian/regional expressions used for exact-match review signals. Entries may be contextual and are not automatic SVM overrides. |
 | `data/togelnumbers.json` | Source registry for possible number-meaning references; meanings are currently empty/unverified. |
 
-`models/` currently contains the mood, sentiment, subtopic, and TriModel artifacts. It does not yet contain the new `toxic_or_not` artifact; rerun the modeling notebook to create it.
+`models/` contains serialized artifacts: `mood_model.pkl`, `sentiment_model.pkl`, `subtopic_model.pkl`, `trimodel_model.pkl`, `vectorizer_model.pkl`, `toxic_or_not_model.pkl`, `all_topics.json`, and `evaluation_metrics.json`.
 
 ## Next Work
 
 1. Revise preprocessing output and verify the persisted schema.
-2. Run `notebooks/03_Modeling.ipynb` top to bottom and review per-class toxicity metrics and rule disagreements.
-3. Complete EDA 1/2 and the dedicated evaluation workflow.
-4. Review lexicon context/provenance and add number meanings only from authorized, verified sources.
-5. Implement dashboard routes, inference, and charts; then verify the end-to-end workflow.
+2. Complete EDA 1 and the dedicated evaluation workflow notebook if required for academic submission.
+3. Review lexicon context/provenance and add number meanings only from authorized, verified sources.
+4. Expand live X/social media scrapers with verified API tokens.

@@ -1,0 +1,53 @@
+{
+  "dataset_rows": 23009,
+  "train_rows": 18410,
+  "test_rows": 4599,
+  "topics_count": 10,
+  "toxicity_prevalence": 0.09313746794732496,
+  "toxicity_svm": {
+    "accuracy": 0.9130245705588171,
+    "precision_macro": 0.7695257701151333,
+    "recall_macro": 0.5375626584174853,
+    "f1_macro": 0.547911190451381,
+    "precision_toxic": 0.6226415094339622,
+    "recall_toxic": 0.07990314769975787,
+    "f1_toxic": 0.14163090128755365,
+    "brier_score_loss": 0.06939017173926389,
+    "confusion_matrix": [
+      [
+        4166,
+        20
+      ],
+      [
+        380,
+        33
+      ]
+    ],
+    "disagreements_count": 923
+  },
+  "toxicity_rule_only": {
+    "accuracy": 0.7595129375951294,
+    "precision_macro": 0.5293960119010959,
+    "recall_macro": 0.559081117850462,
+    "f1_macro": 0.5245606117934906
+  },
+  "toxicity_or_experiment": {
+    "accuracy": 0.7606001304631441,
+    "precision_macro": 0.5366465613588955,
+    "recall_macro": 0.5749552584482577,
+    "f1_macro": 0.5331761242427536
+  },
+  "mood_proxy": {
+    "accuracy": 0.9112850619699935,
+    "f1_macro": 0.5444182008181278
+  },
+  "sentiment_proxy": {
+    "accuracy": 0.9112850619699935,
+    "f1_macro": 0.5444182008181278
+  },
+  "subtopics": {
+    "exact_match_accuracy": 0.745814307458143,
+    "micro_f1": 0.8795892666860409,
+    "hamming_loss": 0.027027614698847575
+  }
+}
