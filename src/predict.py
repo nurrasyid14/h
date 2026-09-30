@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 
+from src.classif import GamblingAdDetector
 from src.classif.toxicity_meter import ToxicityMeter
 from src.preprocessing import normalize_text
 from src.trimodel_rf import TriModelRF
@@ -80,6 +81,7 @@ def predict_single_text(text: str, model: TriModelRF | None = None) -> dict[str,
             "subtopic": np.array([0, 0], dtype=int),
             "subtopic_labels": np.array(["topic_a", "topic_b"]),
             "toxicity": 0.0,
+            "gambling_ad": GamblingAdDetector().classify(text),
         }
 
     if model is None:
@@ -97,6 +99,7 @@ def predict_single_text(text: str, model: TriModelRF | None = None) -> dict[str,
         "subtopic": prediction["subtopic"][0],
         "subtopic_labels": prediction["subtopic_labels"],
         "toxicity": toxicity,
+        "gambling_ad": GamblingAdDetector().classify(text),
     }
 
 

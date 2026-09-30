@@ -1,6 +1,7 @@
 import pandas as pd
 
 from src.classif.toxicity_meter import ToxicityMeter
+from src.classif import GamblingAdDetector
 from src.predict import predict_single_text
 from src.preprocessing import clean_text, normalize_text
 from src.trimodel_rf import TriModelRF
@@ -52,4 +53,14 @@ def test_toxicity_meter_and_predict_text():
     assert 0.0 <= score <= 1.0
 
     prediction = predict_single_text("aku benci kamu dan ingin menghancurkan semuanya")
-    assert set(prediction.keys()) >= {"mood", "sentiment", "subtopic", "toxicity"}
+    assert set(prediction.keys()) >= {"mood", "sentiment", "subtopic", "toxicity", "gambling_ad"}
+
+
+def test_gambling_detector_is_exported_and_used_in_prediction():
+    assert GamblingAdDetector().classify("Menang88")["suspected_gambling_promo"] is True
+
+    promotion_prediction = predict_single_text("Menang88")
+    empty_prediction = predict_single_text("")
+
+    assert promotion_prediction["gambling_ad"]["suspected_gambling_promo"] is True
+    assert empty_prediction["gambling_ad"]["suspected_gambling_promo"] is False
