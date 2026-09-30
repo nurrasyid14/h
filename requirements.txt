@@ -1,4 +1,13 @@
+emoji
+ipykernel
+matplotlib
+nltk
+numpy
 pandas
-scikit-learn
 pytest
-pickles
+Sastrawi
+scikit-learn
+scipy
+seaborn
+tqdm
+wordcloud
